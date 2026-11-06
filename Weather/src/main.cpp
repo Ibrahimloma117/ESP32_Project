@@ -20,6 +20,25 @@
 // CBB - 3v3 for I2C
 // SD0 > GND - selects I2C address (0x76 or 0x77)
 
+Adafruit_ST7789 tft = Adafruit_ST7789(LCD_CS, LCD_DC, LCD_RST);
 
+void setup() {
+    Serial.begin(115200);
+    SPI.begin(LCD_SCL, -1, LCD_SDA, LCD_RST);
+    Serial.println("ST7789 TFT Test");
+
+    tft.init(240, 320); // Init ST7789 240x320 7
+    tft.fillScreen(ST77XX_BLACK);
+
+    tft.setTextColor(ST77XX_GREEN);
+    tft.setTextSize(3);
+    tft.setCursor(10, 10); // Set cursor position
+    tft.println("Hello, World!");
+
+}
+
+void loop() {
+    // Nothing to do here
+}
 
 
