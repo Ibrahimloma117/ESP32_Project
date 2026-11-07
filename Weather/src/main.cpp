@@ -111,13 +111,22 @@ void Pressure() {
     
     tft.println(" hPa");
 
+    tft.setTextSize(2);
+    tft.setCursor(60, 160);
     if(pressure > 1020) {
-        tft.setCursor(60, 90);
-        tft.println("most settled weather");
-    }else if(pressure < 1000) {
+        tft.setTextColor(ST77XX_GREEN);
+        tft.setCursor(60, 160);
+        tft.println("High Pressure");
+    }else if(pressure < 1000) 
+        {
+        tft.setTextColor(ST77XX_RED);
         tft.setCursor(60, 100);
-        tft.println("most unsettled weather");
-    }
+        tft.println("Low Pressure");
+        }else{
+            tft.setTextColor(ST77XX_YELLOW);
+            tft.setCursor(60, 100);
+            tft.println("Normal Pressure");
+        }
 
 
 }
