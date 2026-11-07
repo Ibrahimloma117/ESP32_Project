@@ -25,22 +25,92 @@
 #define joy_y 2
 #define joy_sw 7
 
-bool sensorOK = false;
+//custom color
+//#define BG_COLOR      tft.color565(20, 13, 19)
+#define BUTT_COLOR    tft.color565(20, 35, 26)
+#define BORDER_COLOR  tft.color565(52, 91, 64)
+#define SELECT_COLOR  tft.color565(164, 240, 160)
+#define TEXT_COLOR    tft.color565(183, 221, 176)
+#define TEXT_COLOR2   tft.color565(88, 118, 90)
 
+
+
+bool sensorOK = false;
+bool lastButton = true;
+int page = 0; // home = 0, Temp = 1, Press = 2
 Adafruit_ST7789 tft = Adafruit_ST7789(LCD_CS, LCD_DC, LCD_RST);
 Adafruit_BMP280 bmp; // I2C
 
+int selectBox = 0;
+
+void Home() {
+    
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextColor(ST77XX_GREEN);
+    tft.setTextSize(2);
+    tft.setCursor(60, 25);
+    tft.println("Weather Station");
+
+    //Temperature Button
+    if(selectBox == 0) {
+        tft.fillRect(60, 80, 200, 40, SELECT_COLOR); // x, y, width, height
+    } else {
+        tft.drawRect(60, 80, 200, 40, BORDER_COLOR);
+    }
+
+    //Pressure Button
+    if(selectBox == 1) {
+        tft.fillRect(60, 140, 200, 40, SELECT_COLOR);
+    } else {
+        tft.drawRect(60, 140, 200, 40, BORDER_COLOR);
+    }
+
+    //box labels
+    tft.setTextColor(ST77XX_WHITE);
+    tft.setTextSize(2);
+    tft.setCursor(70, 90);
+    tft.println("Temperature");
+    tft.setCursor(70, 150);
+    tft.println("Pressure");
+}
+
+void Temperature(){
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextColor(ST77XX_GREEN);
+    tft.setTextSize(2);
+    tft.setCursor(60, 25);
+    tft.println("Temperature");
+
+    if(sensorOK){
+        double temp = bmp.readTemperature();
+        tft.print(temp, 1);
+        tft.println(" C");
+    }else {
+        tft.setTextSize(2);
+        tft.setTextColor(ST77XX_RED);
+        tft.println("BMP ERROR");
+    }
+}
+
+void Pressure() {
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextColor(ST77XX_GREEN);
+    tft.setTextSize(3);
+    tft.setCursor(60, 25);
+    tft.println("Pressure");
+}
+
 void setup() {
     Serial.begin(115200);
-    Serial.println("ST7789 TFT Test");
+    Serial.println("Weather Station Starting...");
 
     SPI.begin(LCD_SCL, -1, LCD_SDA, LCD_CS);
     tft.init(240, 320); 
-    tft.setRotation(0); 
-    tft.fillScreen(ST77XX_BLUE);
+    tft.setRotation(1); 
+    tft.fillScreen(ST77XX_BLACK); // HOME SCREEN
     delay(1000);
 
-    Wire.begin(SDA, SCL);
+    Wire.begin(SDA, SCL); // Initialize I2C for BMP280
     sensorOK = bmp.begin(BMP280_ADDRESS);
 
     if (!sensorOK) {
@@ -50,31 +120,31 @@ void setup() {
         tft.println("BMP280 ERROR");
     }
 
-
-
+    Home(); // Display the home screen
 }
 
 void loop() {
-    if(sensorOK) {
-        double temp = bmp.readTemperature();
+    int x = analogRead(joy_x);
+    bool Button = digitalRead(joy_sw);
 
-        tft.fillRect(0, 120, 240, 40, ST77XX_BLUE); // Clear previous temperature display
+    if(page == 0) {
+        if (x < 1000) {
+            selectBox = 0; // Select Temperature
+            Home();
+        } else if (x > 3000) {
+            selectBox = 1; // Select Pressure
+            Home();
+        }
 
+        
+            
 
-        tft.setTextSize(3);
-        tft.setTextColor(ST77XX_CYAN);
-        tft.setCursor(25, 90);
-        tft.print("Temperature");
-
-
-        // Display temperature on the screen
-        tft.setTextSize(4);
-        tft.setTextColor(ST77XX_WHITE);
-        tft.setCursor(25, 130);
-        tft.print(temp, 2); // Print temperature with 1 decimal place
-        tft.print(" C");
+            
+        
     }
-    delay(1000); // Update every second
+
+    lastButton = Button;
+    delay(100); 
 }
 
 
