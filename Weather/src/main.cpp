@@ -36,7 +36,7 @@
 
 
 bool sensorOK = false;
-bool lastButton = true;
+bool lastButton = HIGH;
 int page = 0; // home = 0, Temp = 1, Press = 2
 Adafruit_ST7789 tft = Adafruit_ST7789(LCD_CS, LCD_DC, LCD_RST);
 Adafruit_BMP280 bmp; // I2C
@@ -103,6 +103,8 @@ void Pressure() {
 void setup() {
     Serial.begin(115200);
     Serial.println("Weather Station Starting...");
+    pinMode(joy_sw, INPUT_PULLUP);
+    analogReadResolution(12); // 12bits, 4095
 
     SPI.begin(LCD_SCL, -1, LCD_SDA, LCD_CS);
     tft.init(240, 320); 
@@ -126,8 +128,7 @@ void setup() {
 void loop() {
     int x = analogRead(joy_x);
     bool Button = digitalRead(joy_sw);
-
-    if(page == 0) {
+    
         if (x < 1000) {
             selectBox = 0; // Select Temperature
             Home();
@@ -136,12 +137,20 @@ void loop() {
             Home();
         }
 
+        if(lastButton == HIGH && Button == LOW) {
+            if(selectBox == 0){
+                page = 1;
+                Temperature();
+            }else {
+                page = 2;
+                Pressure();
+            }
+        }
+
         
             
 
-            
         
-    }
 
     lastButton = Button;
     delay(100); 
