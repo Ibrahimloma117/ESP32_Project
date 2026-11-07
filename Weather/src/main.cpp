@@ -78,12 +78,13 @@ void Home() {
 void Temperature(){
     tft.fillScreen(ST77XX_BLACK);
     tft.setTextColor(ST77XX_GREEN);
-    tft.setTextSize(2);
+    tft.setTextSize(3);
     tft.setCursor(60, 25);
     tft.println("Temperature");
 
     if(sensorOK){
         double temp = bmp.readTemperature();
+        tft.setCursor(60, 60);
         tft.print(temp, 1);
         tft.println(" C");
     }else {
@@ -99,6 +100,26 @@ void Pressure() {
     tft.setTextSize(3);
     tft.setCursor(60, 25);
     tft.println("Pressure");
+
+    double pressure = bmp.readPressure() / 100; // Pa, Pa/100 = hPa (atmosphere pressure)
+
+    tft.setTextSize(3);
+    tft.setTextColor(ST77XX_GREEN);
+    tft.setCursor(60, 60);
+    tft.print(pressure, 1); // decimal point
+
+    
+    tft.println(" hPa");
+
+    if(pressure > 1020) {
+        tft.setCursor(60, 90);
+        tft.println("most settled weather");
+    }else if(pressure < 1000) {
+        tft.setCursor(60, 100);
+        tft.println("most unsettled weather");
+    }
+
+
 }
 
 void setup() {
@@ -114,6 +135,7 @@ void setup() {
     delay(1000);
 
     Wire.begin(SDA, SCL); // Initialize I2C for BMP280
+    Wire.setClock(100000);
     sensorOK = bmp.begin(BMP280_ADDRESS);
 
     if (!sensorOK) {
@@ -131,6 +153,7 @@ void loop() {
     bool Button = digitalRead(joy_sw);
     Time = millis();
     
+    if(page == 0) {
         if (x < 1000) {
             selectBox = 0; // Select Temperature
             Home();
@@ -151,7 +174,14 @@ void loop() {
             oldTime = millis();
         }
 
-        if(Time - oldTime >= 500) {
+    }else{
+
+        if(x < 1000){
+            page = 0;
+            Home();
+        }
+
+        else if(Time - oldTime >= 500) {
             oldTime = Time;
             if(page == 1) {
                 Temperature();
@@ -160,12 +190,10 @@ void loop() {
             }
         }
 
-
+    }
 
         
             
-
-        
 
     lastButton = Button;
     delay(100); 
