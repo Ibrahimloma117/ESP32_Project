@@ -40,6 +40,7 @@ bool lastButton = HIGH;
 int page = 0; // home = 0, Temp = 1, Press = 2
 Adafruit_ST7789 tft = Adafruit_ST7789(LCD_CS, LCD_DC, LCD_RST);
 Adafruit_BMP280 bmp; // I2C
+uint32_t Time, oldTime = 0;
 
 int selectBox = 0;
 
@@ -128,6 +129,7 @@ void setup() {
 void loop() {
     int x = analogRead(joy_x);
     bool Button = digitalRead(joy_sw);
+    Time = millis();
     
         if (x < 1000) {
             selectBox = 0; // Select Temperature
@@ -145,7 +147,20 @@ void loop() {
                 page = 2;
                 Pressure();
             }
+
+            oldTime = millis();
         }
+
+        if(Time - oldTime >= 500) {
+            oldTime = Time;
+            if(page == 1) {
+                Temperature();
+            }else if(page == 2){
+                Pressure();
+            }
+        }
+
+
 
         
             
