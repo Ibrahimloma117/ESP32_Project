@@ -75,12 +75,8 @@ void Home() {
     tft.println("Pressure");
 }
 
-void Temperature(){
-   // tft.fillScreen(ST77XX_BLACK);
-    tft.setTextColor(ST77XX_GREEN);
-    tft.setTextSize(3);
-    tft.setCursor(60, 25);
-    tft.println("Temperature");
+void TempData(){
+    tft.fillRect(60,60,200,40, ST77XX_BLACK);
 
     if(sensorOK){
         double temp = bmp.readTemperature();
@@ -94,12 +90,16 @@ void Temperature(){
     }
 }
 
-void Pressure() {
-    //tft.fillScreen(ST77XX_BLACK); // screen flicker test
+void TempPage() {
+    tft.fillScreen(ST77XX_BLACK);
     tft.setTextColor(ST77XX_GREEN);
     tft.setTextSize(3);
     tft.setCursor(60, 25);
-    tft.println("Pressure");
+    tft.println("Temperature");
+
+}
+
+void PressureData() {
 
     double pressure = bmp.readPressure() / 100; // Pa, Pa/100 = hPa (atmosphere pressure)
 
@@ -129,6 +129,15 @@ void Pressure() {
         }
 
 
+}
+
+void PressurePage() {
+    // stuff
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextColor(ST77XX_GREEN);
+    tft.setTextSize(3);
+    tft.setCursor(60, 25);
+    tft.println("Pressure");
 }
 
 void setup() {
@@ -174,10 +183,10 @@ void loop() {
         if(lastButton == HIGH && Button == LOW) {
             if(selectBox == 0){
                 page = 1;
-                Temperature();
+                TempPage();
             }else {
                 page = 2;
-                Pressure();
+                PressurePage();
             }
 
             oldTime = millis();
@@ -190,12 +199,12 @@ void loop() {
             Home();
         }
 
-        else if(Time - oldTime >= 500) {
+        else if(Time - oldTime >= 1000) {
             oldTime = Time;
             if(page == 1) {
-                Temperature();
+                TempData();
             }else if(page == 2){
-                Pressure();
+                PressureData();
             }
         }
 
