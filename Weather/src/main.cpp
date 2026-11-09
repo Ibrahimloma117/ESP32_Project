@@ -76,7 +76,7 @@ void Home() {
 }
 
 void Temperature(){
-    tft.fillScreen(ST77XX_BLACK);
+   // tft.fillScreen(ST77XX_BLACK);
     tft.setTextColor(ST77XX_GREEN);
     tft.setTextSize(3);
     tft.setCursor(60, 25);
@@ -95,7 +95,7 @@ void Temperature(){
 }
 
 void Pressure() {
-    tft.fillScreen(ST77XX_BLACK);
+    //tft.fillScreen(ST77XX_BLACK); // screen flicker test
     tft.setTextColor(ST77XX_GREEN);
     tft.setTextSize(3);
     tft.setCursor(60, 25);
