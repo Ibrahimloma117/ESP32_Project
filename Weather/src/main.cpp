@@ -103,6 +103,8 @@ void PressureData() {
 
     double pressure = bmp.readPressure() / 100; // Pa, Pa/100 = hPa (atmosphere pressure)
 
+    tft.fillRect(60,60,200,40, ST77XX_BLACK); // clear screen, combining texts
+
     tft.setTextSize(3);
     tft.setTextColor(ST77XX_GREEN);
     tft.setCursor(60, 60);
