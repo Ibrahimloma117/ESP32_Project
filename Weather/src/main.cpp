@@ -45,7 +45,7 @@ void setup() {
     SPI.begin(LCD_SCL, -1, LCD_SDA, LCD_CS);
     tft.init(240, 320); 
     tft.setRotation(1); 
-    tft.fillScreen(ST77XX_BLACK); // HOME SCREEN
+    tft.fillScreen(ST77XX_WHITE); // HOME SCREEN
     delay(1000);
 
     Wire.begin(SDA, SCL); // Initialize I2C for BMP280
@@ -105,10 +105,6 @@ void loop() {
         }
 
     }
-
-        
-            
-
     lastButton = Button;
     delay(100); 
 }

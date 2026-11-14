@@ -6,7 +6,7 @@
 #include <Adafruit_BMP280.h> 
 
 
-// gotta let know these variables and objects
+// gotta let know these variables and objects, doesnt create another
 extern int selectBox;
 extern Adafruit_ST7789 tft;
 extern bool sensorOK;
@@ -17,4 +17,5 @@ void TempData();
 void TempPage();
 void PressureData();
 void PressurePage();
+
 #endif
