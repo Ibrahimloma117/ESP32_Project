@@ -19,5 +19,7 @@ void PressureData();
 void PressurePage();
 void AltitudePage();
 void AltitudeData();
+void SeaLevel();
+void SeaLevelPage();
 
 #endif

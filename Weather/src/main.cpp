@@ -71,7 +71,7 @@ void loop() {
     if(page == 0) {
         if(x > 3000) {
             selectBox++;
-            if(selectBox > 2) {
+            if(selectBox > 3) {
                 selectBox = 0;
                 Home();
             }
@@ -79,7 +79,7 @@ void loop() {
         }else if(x < 1000) {
             selectBox--;
             if(selectBox < 0) {
-                selectBox = 2;
+                selectBox = 3;
                 Home();
             }
             Home();
@@ -95,6 +95,9 @@ void loop() {
             }else if(selectBox == 2) {
                 page = 3;
                 AltitudePage();
+            }else if(selectBox == 3) {
+                page = 4;
+                SeaLevelPage();
             }
 
             oldTime = millis();
@@ -113,12 +116,12 @@ void loop() {
                 TempData();
             }else if(page == 2){
                 PressureData();
-            }else {
+            }else if(page == 3){
                 AltitudeData();
+            }else {
+                SeaLevel();
             }
         }
-        
-
     }
     lastButton = Button;
     delay(50); 
