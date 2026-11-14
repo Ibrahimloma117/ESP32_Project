@@ -33,6 +33,7 @@ int page = 0; // home = 0, Temp = 1, Press = 2
 Adafruit_ST7789 tft = Adafruit_ST7789(LCD_CS, LCD_DC, LCD_RST);
 Adafruit_BMP280 bmp; 
 uint32_t Time, oldTime = 0;
+String name;
 
 int selectBox = 0;
 

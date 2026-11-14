@@ -55,13 +55,20 @@ void TempData(){
     }
 }
 
-void TempPage() {
+void DrawPage(String name) {
     tft.fillScreen(ST77XX_BLACK);
     tft.setTextColor(ST77XX_GREEN);
     tft.setTextSize(3);
     tft.setCursor(60, 25);
-    tft.println("Temperature");
+    tft.println(name);
+}
 
+void TempPage() {
+    DrawPage("Temperature");
+}
+
+void PressurePage() {
+    DrawPage("Pressure");
 }
 
 void PressureData() {
@@ -96,13 +103,4 @@ void PressureData() {
         }
 
 
-}
-
-void PressurePage() {
-    // stuff
-    tft.fillScreen(ST77XX_BLACK);
-    tft.setTextColor(ST77XX_GREEN);
-    tft.setTextSize(3);
-    tft.setCursor(60, 25);
-    tft.println("Pressure");
 }
