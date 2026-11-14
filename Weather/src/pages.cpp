@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <pages.h>
+#include<math.h>
 
 //custom color
 #define BUTT_COLOR    tft.color565(20, 35, 26)
@@ -8,6 +9,7 @@
 #define TEXT_COLOR    tft.color565(183, 221, 176)
 #define TEXT_COLOR2   tft.color565(88, 118, 90)
 
+float Altitude;
 
 void Home() {
     
@@ -19,25 +21,34 @@ void Home() {
 
     //Temperature Button
     if(selectBox == 0) {
-        tft.fillRect(60, 80, 200, 40, SELECT_COLOR); // x, y, width, height
+        tft.fillRect(60, 60, 200, 40, SELECT_COLOR); // x, y, width, height
     } else {
-        tft.drawRect(60, 80, 200, 40, BORDER_COLOR);
+        tft.drawRect(60, 60, 200, 40, BORDER_COLOR);
     }
 
     //Pressure Button
     if(selectBox == 1) {
-        tft.fillRect(60, 140, 200, 40, SELECT_COLOR);
+        tft.fillRect(60, 120, 200, 40, SELECT_COLOR);
     } else {
-        tft.drawRect(60, 140, 200, 40, BORDER_COLOR);
+        tft.drawRect(60, 120, 200, 40, BORDER_COLOR);
+    }
+
+     //Altitude Button
+    if(selectBox == 2) {
+        tft.fillRect(60, 180, 200, 40, SELECT_COLOR);
+    } else {
+        tft.drawRect(60, 180, 200, 40, BORDER_COLOR);
     }
 
     //box labels
     tft.setTextColor(ST77XX_WHITE);
     tft.setTextSize(2);
-    tft.setCursor(70, 90);
+    tft.setCursor(70, 70);
     tft.println("Temperature");
-    tft.setCursor(70, 150);
+    tft.setCursor(70, 130);
     tft.println("Pressure");
+    tft.setCursor(70, 190);
+    tft.println("Altitude");
 }
 
 void TempData(){
@@ -71,6 +82,11 @@ void PressurePage() {
     DrawPage("Pressure");
 }
 
+void AltitudePage() {
+    DrawPage("Altitude");
+}
+
+
 void PressureData() {
 
     double pressure = bmp.readPressure() / 100; // Pa, Pa/100 = hPa (atmosphere pressure)
@@ -81,8 +97,6 @@ void PressureData() {
     tft.setTextColor(ST77XX_GREEN);
     tft.setCursor(60, 60);
     tft.print(pressure, 1); // decimal point
-
-    
     tft.println(" hPa");
 
     tft.setTextSize(2);
@@ -101,6 +115,17 @@ void PressureData() {
             tft.setCursor(60, 100);
             tft.println("Normal Pressure");
         }
-
-
 }
+
+
+void AltitudeData() {
+    Altitude = 44330 * (1 - pow(bmp.readPressure() / 101325.0, 0.1903)); // in m
+
+    tft.setTextSize(3);
+    tft.setTextColor(ST77XX_GREEN);
+    tft.setCursor(60, 60);
+    tft.print(Altitude, 1); // decimal point
+    tft.println(" m");
+}
+
+

@@ -17,5 +17,7 @@ void TempData();
 void TempPage();
 void PressureData();
 void PressurePage();
+void AltitudePage();
+void AltitudeData();
 
 #endif

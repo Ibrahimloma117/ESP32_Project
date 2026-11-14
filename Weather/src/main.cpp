@@ -69,11 +69,19 @@ void loop() {
     Time = millis();
     
     if(page == 0) {
-        if (x < 1000) {
-            selectBox = 0; // Select Temperature
+        if(x > 3000) {
+            selectBox++;
+            if(selectBox > 2) {
+                selectBox = 0;
+                Home();
+            }
             Home();
-        } else if (x > 3000) {
-            selectBox = 1; // Select Pressure
+        }else if(x < 1000) {
+            selectBox--;
+            if(selectBox < 0) {
+                selectBox = 2;
+                Home();
+            }
             Home();
         }
 
@@ -81,9 +89,12 @@ void loop() {
             if(selectBox == 0){
                 page = 1;
                 TempPage();
-            }else {
+            }else if(selectBox == 1){
                 page = 2;
                 PressurePage();
+            }else if(selectBox == 2) {
+                page = 3;
+                AltitudePage();
             }
 
             oldTime = millis();
@@ -96,18 +107,21 @@ void loop() {
             Home();
         }
 
-        else if(Time - oldTime >= 500) {
+        else if(Time - oldTime >= 1000) {
             oldTime = Time;
             if(page == 1) {
                 TempData();
             }else if(page == 2){
                 PressureData();
+            }else {
+                AltitudeData();
             }
         }
+        
 
     }
     lastButton = Button;
-    delay(100); 
+    delay(50); 
 }
 
 
